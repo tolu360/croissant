@@ -4,7 +4,7 @@ Croissant is a simple, minimal, lightweight blogging app written on the Laravel
 framework. Croissant isn't a full fledged CMS, nor is it overloaded with a ton
 of features.
 
-The project takes inspiration from Eric Barnes's [Wardrobe](https://github.com/ericbarnes/wardrobe),
+The project takes inspiration from Eric Barnes's [Wardrobe](http://wardrobecms.com),
 but strays away from some of the more advanced techniques Eric has implemented
 with Wardrobe. Like Wardrobe, Croissant also allows you to post your content 
 using markdown syntax.
