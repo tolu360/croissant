@@ -16,7 +16,7 @@ installed.*
 
 Clone the repo:
 
-    $ git clone https://github.com/ericbarnes/wardrobe.git
+    $ git clone https://github.com/jesseterry/croissant.git
 
 Edit app/config/database.php to configure your database.
 
