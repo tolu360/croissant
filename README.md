@@ -20,6 +20,10 @@ Clone the repo:
 
 Edit app/config/database.php to configure your database.
 
+Give appropriate permissions to the app/storage folder:
+
+    $ chmod -R 777 app/storage
+
 Run the following from the root of your project to install Laravel and all the 
 dependencies:
 
@@ -35,8 +39,6 @@ Then seed the database:
 
 The database will create a sample post, sample page content, and a default user
 account with admin / password as the username / password.
-
-Finally, be sure to chmod your app/storage folders appropriately.
 
 ##Using Croissant
 
