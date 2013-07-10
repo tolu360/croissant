@@ -113,7 +113,7 @@ Route::group(array('before' => 'auth'), function() {
            return Redirect::to('admin/posts');
        }
 
-       return Redirect::to('admin/post/create')->withInput();
+       return Redirect::to('admin/post/create')->withInput()->withErrors($post->validator);
     });
 
     // Edit a post - display the form
@@ -136,7 +136,7 @@ Route::group(array('before' => 'auth'), function() {
             return Redirect::to('admin/posts');
         }
 
-        return Redirect::to('admin/post/edit/' . $id)->withInput();
+        return Redirect::to('admin/post/edit/' . $id)->withInput()->withErrors($post->validator);
     }));
 
     // Delete a post
@@ -170,7 +170,7 @@ Route::group(array('before' => 'auth'), function() {
            return Redirect::to('admin/pages');
        }
 
-       return Redirect::to('admin/page/create')->withInput();
+       return Redirect::to('admin/page/create')->withInput()->withErrors($page->validator);
     });
 
     // Edit a page - display the form
@@ -193,7 +193,7 @@ Route::group(array('before' => 'auth'), function() {
             return Redirect::to('admin/pages');
         }
 
-        return Redirect::to('admin/page/edit/' . $id)->withInput();
+        return Redirect::to('admin/page/edit/' . $id)->withInput()->withErrors($page->validator);
     }));
 
     // Delete a page

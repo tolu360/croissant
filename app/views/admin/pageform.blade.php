@@ -6,6 +6,10 @@
 
 <hr>
 
+@foreach ($errors->all() as $error)
+<div class="alert alert-error">{{ $error }}</div>
+@endforeach
+
 {{ $form_open }}
     <fieldset>
         <label>Page Title</label>
