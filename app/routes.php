@@ -264,7 +264,7 @@ Route::group(array('before' => 'auth'), function() {
             return Redirect::to('admin/users');
         }
 
-        return Redirect::to('admin/usr/edit/' . $id)->withInput()->withErrors($user->validator);
+        return Redirect::to('admin/user/edit/' . $id)->withInput()->withErrors($user->validator);
     }));
 
     // Delete a user
