@@ -19,7 +19,8 @@
         <tr>
             <th style="width: 15%;">Created</th>
             <th style="width: 15%;">Updated</th>
-            <th style="width: 55%;">Title</th>
+            <th style="width: 45%;">Title</th>
+            <th style="width: 10%; text-align: center;">Published</th>
             <th style="width: 15%;">Actions</th>
         </tr>
     </thead>
@@ -29,6 +30,7 @@
             <td>{{ $page->created_at->format('m/d/Y') }}</td>
             <td>{{ $page->updated_at->format('m/d/Y') }}</td>
             <td>{{ $page->page_title }}</td>
+            <td style="text-align: center;">{{ $page->is_published }}</td>
             <td>
                 <div class="btn-group">
                     <a href="{{ url('admin/page/edit/' . $page->id) }}" class="btn btn-mini"><i class="icon-pencil"></i> Edit</a>
