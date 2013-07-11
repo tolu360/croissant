@@ -26,9 +26,9 @@
     <tbody>
         @foreach ($pages as $page)
         <tr>
-            <td><?php echo $page->created_at->format('m/d/Y'); ?></td>
-            <td><?php echo $page->updated_at->format('m/d/Y'); ?></td>
-            <td><?php echo $page->page_title; ?></td>
+            <td>{{ $page->created_at->format('m/d/Y') }}</td>
+            <td>{{ $page->updated_at->format('m/d/Y') }}</td>
+            <td>{{ $page->page_title }}</td>
             <td>
                 <div class="btn-group">
                     <a href="{{ url('admin/page/edit/' . $page->id) }}" class="btn btn-mini"><i class="icon-pencil"></i> Edit</a>

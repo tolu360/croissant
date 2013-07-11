@@ -18,6 +18,9 @@
         <label>Page Content</label>
         {{ Form::textarea('page_content', NULL, array('style'=>'width: 100%; height: 300px;')) }}
 
+        <label>Published</label>
+        {{ Form::select('page_published', array('1' => 'Yes', '0' => 'No')); }}
+
         <div class="control-group">
             <div class="controls">
                 {{ Form::submit('Submit') }}

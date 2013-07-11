@@ -33,4 +33,9 @@ class Page extends BaseModel {
         return md($this->attributes['page_content']);
     }
 
+    public function scopePublished($query)
+    {
+        return $query->where('page_published', '=', 1);
+    }
+
 }

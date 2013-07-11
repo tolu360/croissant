@@ -58,7 +58,7 @@ Route::get('post/{post_url_title}', function($post_url_title)
 // View a page
 Route::get('page/{page_url_title}', function($page_url_title)
 {
-    return View::make('themes.' . Config::get('croissant.default_theme') . '.page')->with('page', Page::where('page_url_title', $page_url_title)->first());
+    return View::make('themes.' . Config::get('croissant.default_theme') . '.page')->with('page', Page::published()->where('page_url_title', $page_url_title)->first());
 });
 
 // Display the admin login form

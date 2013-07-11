@@ -24,7 +24,7 @@
     <tbody>
         @foreach ($users as $user)
         <tr>
-            <td><?php echo $user->username; ?></td>
+            <td>{{ $user->username }}</td>
             <td>
                 <div class="btn-group">
                     <a href="{{ url('admin/user/edit/' . $user->id) }}" class="btn btn-mini"><i class="icon-pencil"></i> Edit</a>

@@ -26,9 +26,9 @@
     <tbody>
         @foreach ($posts as $post)
         <tr>
-            <td><?php echo $post->created_at->toDateTimeString(); ?></td>
-            <td><?php echo $post->post_title; ?></td>
-            <td style="text-align: center;"><?php echo $post->is_published; ?></td>
+            <td>{{ $post->created_at->toDateTimeString() }}</td>
+            <td>{{ $post->post_title }}</td>
+            <td style="text-align: center;">{{ $post->is_published }}</td>
             <td>
                 <div class="btn-group">
                     <a href="{{ url('admin/post/edit/' . $post->id) }}" class="btn btn-mini"><i class="icon-pencil"></i> Edit</a>
