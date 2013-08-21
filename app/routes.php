@@ -30,8 +30,6 @@ Route::filter('auth', function()
         // The user is not logged in, so redirect them to the login form
         return Redirect::to('admin/login');
     }
-    
-    // The user is logged in - do nothing
 });
 
 /*
@@ -39,46 +37,24 @@ Route::filter('auth', function()
  * Routes
  *--------------------------------------------------------------------------
  * 
- * Items such as routes, routes and routes
+ * Define our controller action routes
  * 
  */
 
 // The default public route
-Route::get('/', function()
-{
-	return View::make('themes.' . Config::get('croissant.default_theme') . '.index')->with('posts', Post::published()->orderby('created_at', 'DESC')->paginate(25));
-});
+Route::get('/', 'PublicPostController@index');
 
 // View an individual post
-Route::get('post/{post_url_title}', function($post_url_title)
-{
-    return View::make('themes.' . Config::get('croissant.default_theme') . '.post')->with('post', Post::published()->where('post_url_title', $post_url_title)->first());
-});
+Route::get('post/{post_url_title}', 'PublicPostController@showPost');
 
 // View a page
-Route::get('page/{page_url_title}', function($page_url_title)
-{
-    return View::make('themes.' . Config::get('croissant.default_theme') . '.page')->with('page', Page::published()->where('page_url_title', $page_url_title)->first());
-});
+Route::get('page/{page_url_title}', 'PublicPageController@showPage');
 
 // Display the admin login form
-Route::get('admin/login', function() 
-{
-    return View::make('admin.login');
-});
+Route::get('admin/login', 'AdminSessionController@getLogin');
 
 // Attempt to validate the admin login
-Route::post('admin/login', function()
-{
-    $remember = (Request::get('remember_me') == 1) ? true : false;
-    
-    if (Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password')), $remember))
-    {
-        return Redirect::to('admin');
-    }
-    
-    return Redirect::to('admin/login');
-});
+Route::post('admin/login', 'AdminSessionController@postLogin');
 
 // Group the admin pages for auth filter
 Route::group(array('before' => 'auth'), function() {
@@ -90,198 +66,60 @@ Route::group(array('before' => 'auth'), function() {
     });
     
     // Default admin route - show the dashboard
-    Route::get('admin/posts', function()
-    {
-        return View::make('admin.postindex')->with('posts', Post::paginate(25));
-    });
+    Route::get('admin/posts', 'AdminPostController@getIndex');
 
     // Create a post - display the form
-    Route::get('admin/post/create', function()
-    {
-       return View::make('admin.postform')->with('form_open', Form::open(array('url' => 'admin/post/create')));
-    });
+    Route::get('admin/post/create', 'AdminPostController@getCreate');
 
     // Create a post - form submission
-    Route::post('admin/post/create', function()
-    {
-       $post = new Post(Input::all());
-       
-       $post['user_id'] = Auth::user()->id;
-       
-       if ($post->save())
-       {
-           return Redirect::to('admin/posts');
-       }
-
-       return Redirect::to('admin/post/create')->withInput()->withErrors($post->validator);
-    });
+    Route::post('admin/post/create', 'AdminPostController@postCreate');
 
     // Edit a post - display the form
-    Route::get('admin/post/edit/{post}', function(Post $post)
-    {
-        $data = array(
-            'post' => $post,
-            'form_open' => Form::model($post, array('route' => array('post.edit', $post->id)))
-        );
-        return View::make('admin.postform', $data);
-    });
+    Route::get('admin/post/edit/{post}', 'AdminPostController@getEdit');
 
     // Edit a post - form submission
-    Route::post('admin/post/edit/{id}', array('as' => 'post.edit', function($id)
-    {
-        $post = Post::find($id);
-
-        if ($post->update(Input::all()))
-        {
-            return Redirect::to('admin/posts');
-        }
-
-        return Redirect::to('admin/post/edit/' . $id)->withInput()->withErrors($post->validator);
-    }));
+    Route::post('admin/post/edit/{id}', array('uses' => 'AdminPostController@postEdit', 'as' => 'post.edit'));
 
     // Delete a post
-    Route::get('admin/post/delete/{id}', function($id)
-    {
-        $post = Post::find($id);
-        $post->delete();
-
-        return Redirect::to('admin/posts');
-    });
+    Route::get('admin/post/delete/{id}', 'AdminPostController@getDelete');
     
-    // Default admin route - lists the pages
-    Route::get('admin/pages', function()
-    {
-        return View::make('admin.pageindex')->with('pages', Page::paginate(25));
-    });
+    // Lists the pages
+    Route::get('admin/pages', 'AdminPageController@getIndex');
 
     // Create a page - display the form
-    Route::get('admin/page/create', function()
-    {
-       return View::make('admin.pageform')->with('form_open', Form::open(array('url' => 'admin/page/create')));
-    });
+    Route::get('admin/page/create', 'AdminPageController@getCreate');
 
     // Create a page - form submission
-    Route::post('admin/page/create', function()
-    {
-       $page = new Page(Input::all());
-
-       if ($page->save())
-       {
-           return Redirect::to('admin/pages');
-       }
-
-       return Redirect::to('admin/page/create')->withInput()->withErrors($page->validator);
-    });
+    Route::post('admin/page/create', 'AdminPageController@postCreate');
 
     // Edit a page - display the form
-    Route::get('admin/page/edit/{page}', function(Page $page)
-    {
-        $data = array(
-            'page' => $page,
-            'form_open' => Form::model($page, array('route' => array('page.edit', $page->id)))
-        );
-        return View::make('admin.pageform', $data);
-    });
+    Route::get('admin/page/edit/{page}', 'AdminPageController@getEdit');
 
     // Edit a page - form submission
-    Route::post('admin/page/edit/{id}', array('as' => 'page.edit', function($id)
-    {
-        $page = Page::find($id);
-
-        if ($page->update(Input::all()))
-        {
-            return Redirect::to('admin/pages');
-        }
-
-        return Redirect::to('admin/page/edit/' . $id)->withInput()->withErrors($page->validator);
-    }));
+    Route::post('admin/page/edit/{id}', array('uses' => 'AdminPageController@postEdit', 'as' => 'page.edit'));
 
     // Delete a page
-    Route::get('admin/page/delete/{id}', function($id)
-    {
-        $page = Page::find($id);
-        $page->delete();
-
-        return Redirect::to('admin/pages');
-    });
+    Route::get('admin/page/delete/{id}', 'AdminPageController@getDelete');
     
     // List the users
-    Route::get('admin/users', function()
-    {
-        return View::make('admin.userindex')->with('users', User::paginate(25));
-    });
+    Route::get('admin/users', 'AdminUserController@getIndex');
     
     // Create a user - display form
-    Route::get('admin/user/create', function()
-    {
-        return View::make('admin.userform')->with('form_open', Form::open(array('url' => 'admin/user/create')));
-    });
+    Route::get('admin/user/create', 'AdminUserController@getCreate');
     
     // Create a user - form submission
-    Route::post('admin/user/create', function()
-    {
-       $user = new User(Input::all());
-
-       if ($user->isValid())
-       {
-            unset($user->password_verification);
-            
-            $user->password = Hash::make($user->password);
-
-            $user->save();
-
-            return Redirect::to('admin/users');
-       }
-
-       return Redirect::to('admin/user/create')->withInput()->withErrors($user->validator);
-    });
+    Route::post('admin/user/create', 'AdminUserController@postCreate');
 
     // Edit a user - display form
-    Route::get('admin/user/edit/{user}', function(User $user)
-    {
-        $data = array(
-            'user' => $user,
-            'form_open' => Form::model($user, array('route' => array('user.edit', $user->id)))
-        );
-        return View::make('admin.userform', $data);
-    });
+    Route::get('admin/user/edit/{user}', 'AdminUserController@getEdit');
 
     // Edit a user - form submission
-    Route::post('admin/user/edit/{id}', array('as' => 'user.edit', function($id)
-    {
-        $user = User::find($id);
-        
-        $user->username = Input::get('username');
-        $user->password = Input::get('password');
-        $user->password_verification = Input::get('password_verification');
-
-        if ($user->isValid())
-        {
-            unset($user->password_verification);
-            
-            $user->update(array('username'=>Input::get('username'), 'password'=>Hash::make(Input::get('password'))));
-
-            return Redirect::to('admin/users');
-        }
-
-        return Redirect::to('admin/user/edit/' . $id)->withInput()->withErrors($user->validator);
-    }));
+    Route::post('admin/user/edit/{id}', array('uses' => 'AdminUserController@postEdit', 'as' => 'user.edit'));
 
     // Delete a user
-    Route::get('admin/user/delete/{id}', function($id)
-    {
-        $user = User::find($id);
-        $user->delete();
-        
-        return Redirect::to('admin/users');
-    });
+    Route::get('admin/user/delete/{id}', 'AdminUserController@getDelete');
     
     // Log out
-    Route::get('admin/logout', function()
-    {
-        Auth::logout();
-        
-        return Redirect::to('admin/login');
-    });
-    
+    Route::get('admin/logout', 'AdminSessionController@getLogout');
+
 });

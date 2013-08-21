@@ -13,13 +13,13 @@
 {{ $form_open }}
     <fieldset>
         <label>Username</label>
-        {{ Form::text('username', NULL, array('class'=>'input-xxlarge')) }}
-        
+        {{ Form::text('username', NULL, array('class'=>'input')) }}
+
         <label>Password</label>
-        {{ Form::password('password', NULL, array('class'=>'input-xxlarge')) }}
+        {{ Form::password('password', NULL, array('class'=>'input')) }}
         
         <label>Password (Verification)</label>
-        {{ Form::password('password_verification', NULL, array('class'=>'input-xxlarge')) }}
+        {{ Form::password('password_verification', NULL, array('class'=>'input')) }}
 
         <div class="control-group">
             <div class="controls">

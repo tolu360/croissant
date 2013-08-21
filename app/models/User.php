@@ -54,7 +54,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
     {
         return array(
             'username' => 'required',
-            'password' => 'required|same:password_verification'
+            'password' => 'required_without:id|same:password_verification'
         );
     }
 
